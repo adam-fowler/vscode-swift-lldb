@@ -3,24 +3,17 @@ import * as Net from 'net';
 import { LLDBDebugSession } from './LLDBDebugSession';
 import { getSwiftExecutable } from './utilities';
 
+const useServer = true;
+
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
 	console.log('"vscode-swift-lldb" is now active!');
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('vscode-swift-lldb.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from Swift LLDB!');
-	});
-
-	context.subscriptions.push(disposable);
+	if (useServer) {
+		const factory = new LLDBDebugServerDescriptorFactory();
+		context.subscriptions.push(vscode.debug.registerDebugAdapterDescriptorFactory('swift-lldb', factory));
+	}
 }
 
 // This method is called when your extension is deactivated
