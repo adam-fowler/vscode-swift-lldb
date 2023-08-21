@@ -72,8 +72,6 @@
       {
         "type": "swift-lldb",
         "label": "Native Swift LLDB Debugger",
-        "runtime": "node",
-        "program": "./out/debugAdapter.js",
         "configurationAttributes": {
           "launch": {
             "required": [
