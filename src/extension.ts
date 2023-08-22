@@ -1,13 +1,45 @@
 import * as vscode from 'vscode';
+import * as path from 'path';
 import * as Net from 'net';
 import { LLDBDebugSession } from './debugSession';
-import { getSwiftExecutable } from './utilities';
+import { getExecutableName } from './utilities';
 import { LLDBDebugAdapterTrackerFactory } from './debugAdapterTracker';
+
+interface SwiftToolchain {
+	swiftFolderPath: string
+}
+interface SwiftWorkspaceContext {
+	toolchain: SwiftToolchain;
+}
+interface SwiftApi {
+    workspaceContext: SwiftWorkspaceContext;
+}
+
+let swiftFolderPath: string = "";
+
+/**
+ * Get path to swift executable, or executable in swift bin folder
+ *
+ * @param exe name of executable to return
+ */
+export function getSwiftExecutable(exe = "swift"): string {
+    return path.join(swiftFolderPath, getExecutableName(exe));
+}
+
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
 	console.log('"vscode-swift-lldb" is now active!');
+
+	let swiftExtension = vscode.extensions.getExtension('sswg.swift-lang');
+	let swiftApi = swiftExtension?.exports as SwiftApi;
+	if (swiftApi) {
+		swiftFolderPath = swiftApi.workspaceContext.toolchain.swiftFolderPath;
+		console.log(`Debugger: ${getSwiftExecutable("lldb-vscode")}`);
+	} else {
+		console.log(`vscode-swift failed to provide a path to the swift toolchain`);
+	}
 
 	const factory = vscode.debug.registerDebugAdapterDescriptorFactory('swift-lldb', new LLDBDebugAdapterExecutableFactory());
 	const tracker = vscode.debug.registerDebugAdapterTrackerFactory('swift-lldb', new LLDBDebugAdapterTrackerFactory());

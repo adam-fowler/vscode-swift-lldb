@@ -22,12 +22,13 @@ class LLDBDebugAdapterTracker implements vscode.DebugAdapterTracker {
 	 * The debug adapter has sent a Debug Adapter Protocol message to the editor.
 	 */
 	onDidSendMessage?(message: any): void {
-//        console.log(message);
     }
 	/**
 	 * The debug adapter session is about to be stopped.
 	 */
-	onWillStopSession?(): void {}
+	onWillStopSession?(): void {
+		console.log("Stop session");
+	}
 	/**
 	 * An error with the debug adapter has occurred.
 	 */

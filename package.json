@@ -270,6 +270,9 @@
       }
     ]  
   },
+  "extensionDependencies": [
+    "sswg.swift-lang"
+  ],
   "scripts": {
     "vscode:prepublish": "npm run compile",
     "compile": "tsc",
