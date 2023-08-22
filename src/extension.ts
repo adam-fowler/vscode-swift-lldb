@@ -7,6 +7,7 @@ import { LLDBDebugAdapterTrackerFactory } from './debugAdapterTracker';
 
 interface SwiftToolchain {
 	swiftFolderPath: string
+	toolchainPath: string
 }
 interface SwiftWorkspaceContext {
 	toolchain: SwiftToolchain;
@@ -35,7 +36,7 @@ export function activate(context: vscode.ExtensionContext) {
 	let swiftExtension = vscode.extensions.getExtension('sswg.swift-lang');
 	let swiftApi = swiftExtension?.exports as SwiftApi;
 	if (swiftApi) {
-		swiftFolderPath = swiftApi.workspaceContext.toolchain.swiftFolderPath;
+		swiftFolderPath = `${swiftApi.workspaceContext.toolchain.toolchainPath}/usr/bin`;
 		console.log(`Debugger: ${getSwiftExecutable("lldb-vscode")}`);
 	} else {
 		console.log(`vscode-swift failed to provide a path to the swift toolchain`);
