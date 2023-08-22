@@ -1,5 +1,5 @@
 import * as Net from 'net';
-import { LLDBDebugSession } from "./LLDBDebugSession";
+import { LLDBDebugSession } from "./debugSession";
 import { getSwiftExecutable } from './utilities';
 
 console.log("Hello");

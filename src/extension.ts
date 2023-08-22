@@ -1,19 +1,18 @@
 import * as vscode from 'vscode';
 import * as Net from 'net';
-import { LLDBDebugSession } from './LLDBDebugSession';
+import { LLDBDebugSession } from './debugSession';
 import { getSwiftExecutable } from './utilities';
-
-const useServer = true;
+import { LLDBDebugAdapterTrackerFactory } from './debugAdapterTracker';
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
 	console.log('"vscode-swift-lldb" is now active!');
 
-	if (useServer) {
-		const factory = new LLDBDebugAdapterExecutableFactory();
-		context.subscriptions.push(vscode.debug.registerDebugAdapterDescriptorFactory('swift-lldb', factory));
-	}
+	const factory = vscode.debug.registerDebugAdapterDescriptorFactory('swift-lldb', new LLDBDebugAdapterExecutableFactory());
+	const tracker = vscode.debug.registerDebugAdapterTrackerFactory('swift-lldb', new LLDBDebugAdapterTrackerFactory());
+	
+	context.subscriptions.push(factory, tracker);
 }
 
 // This method is called when your extension is deactivated
